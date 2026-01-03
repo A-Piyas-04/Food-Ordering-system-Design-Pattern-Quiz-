@@ -1,14 +1,12 @@
-package com.delivery;
-
-import com.delivery.decorator.ExtraPackagingDecorator;
-import com.delivery.decorator.GiftWrapDecorator;
-import com.delivery.decorator.Order;
-import com.delivery.decorator.PriorityHandlingDecorator;
-import com.delivery.factory.OrderFactory;
-import com.delivery.strategy.DeliveryFeeStrategy;
-import com.delivery.strategy.ExpressDeliveryStrategy;
-import com.delivery.strategy.NormalDeliveryStrategy;
-import com.delivery.strategy.SurgeDeliveryStrategy;
+import decorator.ExtraPackagingDecorator;
+import decorator.GiftWrapDecorator;
+import decorator.Order;
+import decorator.PriorityHandlingDecorator;
+import factory.OrderFactory;
+import strategy.DeliveryFeeStrategy;
+import strategy.ExpressDeliveryStrategy;
+import strategy.NormalDeliveryStrategy;
+import strategy.SurgeDeliveryStrategy;
 
 /**
  * Main class to demonstrate the Online Food Delivery Order Processing System.
@@ -48,22 +46,20 @@ public class Main {
     /**
      * Helper method to process the order and display costs.
      * Demonstrates Template Method (processing) and Strategy Pattern (delivery fee).
+     * @param order The order to process.
+     * @param deliveryStrategy The delivery strategy to use.
      */
     private static void processAndDisplayOrder(Order order, DeliveryFeeStrategy deliveryStrategy) {
-        // Process Order (Template Method)
-        // This will execute the workflow defined in OrderProcessTemplate
+        // 1. Process the order (Template Method)
         order.processOrder();
 
-        // Calculate Fees (Strategy Pattern)
-        double orderCost = order.getCost();
+        // 2. Calculate Delivery Fee (Strategy Pattern)
         double deliveryFee = deliveryStrategy.calculateFee(order);
-        double totalCost = orderCost + deliveryFee;
 
-        // Display Details
-        System.out.println("Order Details:");
-        System.out.println("Description: " + order.getDescription());
-        System.out.println(String.format("Subtotal: $%.2f", orderCost));
-        System.out.println(String.format("Delivery Fee: $%.2f (%s)", deliveryFee, deliveryStrategy.getClass().getSimpleName()));
-        System.out.println(String.format("Total Cost: $%.2f", totalCost));
+        // 3. Display Totals
+        System.out.println("Order Description: " + order.getDescription());
+        System.out.println("Order Cost: $" + String.format("%.2f", order.getCost()));
+        System.out.println("Delivery Fee: $" + String.format("%.2f", deliveryFee));
+        System.out.println("Total Cost: $" + String.format("%.2f", (order.getCost() + deliveryFee)));
     }
 }

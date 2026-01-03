@@ -1,4 +1,4 @@
-package com.delivery.decorator;
+package decorator;
 
 /**
  * Decorator to add Priority Handling to the order.

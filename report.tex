@@ -57,9 +57,29 @@
 \date{\today}
 
 \begin{document}
+%---------------- Cover Page ----------------%
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Huge \bfseries Design Patterns \par}
+    {\Huge \bfseries Quiz-2 (Assignment) \par}
+    
+    \vspace{2cm}
+    {\Large Name: Ahnaf Shahriar Pias \par}
+    \vspace{0.5cm}
+    {\Large Student ID: 220042146 \par}
+    \vspace{0.5cm}
+    {\Large Course Name: Design Patterns  \par}
+    \vspace{0.5cm}
+    {\Large Course Code: SWE-4501 \par}
+    \vspace{0.5cm}
+    {\Large Date: January 3 , 2026 \par}
+    \vfill
+    {\large Department of CSE, IUT \par}
+\end{titlepage}
 
-% Title Page
-\maketitle
+\newpage
+
 
 % Table of Contents
 \tableofcontents
@@ -284,8 +304,10 @@ The system architecture is visualized below using a comprehensive UML Class Diag
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
+    scale=0.8,
+    transform shape,
     font=\footnotesize,
-    node distance=1.5cm and 1cm,
+    node distance=1.2cm and 0.5cm,
     % Styles
     interface/.style={
         rectangle, 
@@ -293,7 +315,7 @@ The system architecture is visualized below using a comprehensive UML Class Diag
         top color=white, bottom color=green!10, 
         text centered, 
         minimum height=0.8cm, 
-        minimum width=3cm,
+        minimum width=2.4cm,
         drop shadow,
         font=\bfseries
     },
@@ -303,7 +325,7 @@ The system architecture is visualized below using a comprehensive UML Class Diag
         top color=white, bottom color=orange!10, 
         text centered, 
         minimum height=0.8cm, 
-        minimum width=3cm,
+        minimum width=2.4cm,
         dashed,
         drop shadow,
         font=\itshape
@@ -314,16 +336,17 @@ The system architecture is visualized below using a comprehensive UML Class Diag
         top color=white, bottom color=blue!10, 
         text centered, 
         minimum height=0.8cm, 
-        minimum width=3cm,
+        minimum width=2.4cm,
         drop shadow
     },
     note/.style={
         rectangle, 
         draw=gray, 
         fill=yellow!10, 
-        text width=3cm, 
+        text width=2.0cm, 
         font=\tiny, 
-        rounded corners
+        rounded corners,
+        align=center
     },
     % Line Styles
     inherit/.style={draw, -open triangle 60, thick},
@@ -335,65 +358,61 @@ The system architecture is visualized below using a comprehensive UML Class Diag
 
 % --- Nodes ---
 
-% Core Interface
+% Center Hub: Order Interface
 \node[interface] (Order) {<<Interface>>\\Order};
 
-% Template Method Branch (Left)
-\node[abstract, below=1.5cm of Order] (Template) {OrderProcessTemplate};
-\node[class, below left=1.5cm and -0.5cm of Template] (FastFood) {FastFoodOrder};
-\node[class, below right=1.5cm and -0.5cm of Template] (FineDining) {FineDiningOrder};
+% Left Column: Factory & Strategy
+\node[class, left=1.0cm of Order] (Factory) {OrderFactory};
+\node[interface, below=1.5cm of Factory] (Strategy) {<<Interface>>\\DeliveryStrategy};
+\node[class, below=0.6cm of Strategy] (NormalStrategy) {NormalStrategy};
+\node[class, below=0.4cm of NormalStrategy] (SurgeStrategy) {SurgeStrategy};
 
-% Decorator Branch (Right)
-\node[abstract, right=3cm of Order] (Decorator) {OrderDecorator};
-\node[class, below=1.5cm of Decorator] (GiftWrap) {GiftWrapDecorator};
-\node[class, right=1cm of GiftWrap] (Priority) {PriorityDecorator};
+% Right Column: Decorator
+\node[abstract, right=1.0cm of Order] (Decorator) {OrderDecorator};
+\node[class, below=0.6cm of Decorator] (GiftWrap) {GiftWrapDecorator};
+\node[class, below=0.4cm of GiftWrap] (Priority) {PriorityDecorator};
 
-% Factory (Top Left)
-\node[class, left=3cm of Order] (Factory) {OrderFactory};
+% Center Column (Bottom): Template Method
+\node[abstract, below=1.5cm of Order] (Template) {OrderTemplate};
+\node[class, below left=0.8cm and -0.8cm of Template] (FastFood) {FastFoodOrder};
+\node[class, below right=0.8cm and -0.8cm of Template] (FineDining) {FineDiningOrder};
 
-% Strategy (Bottom Left separate)
-\node[interface, below=5.5cm of Factory] (Strategy) {<<Interface>>\\DeliveryStrategy};
-\node[class, below=1cm of Strategy] (NormalStrategy) {NormalDeliveryStrategy};
-\node[class, right=1cm of NormalStrategy] (SurgeStrategy) {SurgeDeliveryStrategy};
-
-% Main (Top)
-\node[class, above=2cm of Order, fill=gray!20] (Main) {Main Client};
+% Top: Main Client
+\node[class, above=1.5cm of Order, fill=gray!20] (Main) {Main Client};
 
 % --- Relationships ---
 
-% 1. Template Method Inheritance
+% 1. Factory
+\draw[depend] (Factory) -- node[above, font=\tiny] {creates} (Order);
+
+% 2. Decorator
+\draw[realize] (Decorator) -- (Order);
+\draw[inherit] (GiftWrap) -- (Decorator);
+\draw[inherit] (Priority) -| (Decorator);
+\draw[decorate] (Decorator) -- node[above, font=\tiny] {wraps} (Order);
+
+% 3. Template
 \draw[realize] (Template) -- (Order);
 \draw[inherit] (FastFood) -- (Template);
 \draw[inherit] (FineDining) -- (Template);
 
-% 2. Decorator Pattern
-\draw[realize] (Decorator) -- (Order);
-\draw[inherit] (GiftWrap) -- (Decorator);
-\draw[inherit] (Priority) |- (Decorator);
-% Aggregation: Decorator has an Order
-\draw[decorate] (Decorator) -- node[above, font=\tiny] {wraps} (Order);
-
-% 3. Factory Pattern
-\draw[depend] (Factory) -- node[above, font=\tiny] {creates} (Order);
-
-% 4. Strategy Pattern
+% 4. Strategy
 \draw[realize] (NormalStrategy) -- (Strategy);
-\draw[realize] (SurgeStrategy) |- (Strategy);
+\draw[realize] (SurgeStrategy) -- (Strategy);
 
 % 5. Main Interactions
-\draw[depend] (Main) to[out=180,in=90] (Factory);
+\draw[depend] (Main) -| (Factory);
 \draw[depend] (Main) -- (Order);
-\draw[depend] (Main) to[out=0,in=90] (Decorator);
-\draw[depend] (Main) to[out=270,in=90] (Strategy);
+\draw[depend] (Main) -| (Decorator);
+\draw[depend] (Main) to[out=180,in=90] (Strategy);
 
-% --- Annotations for Patterns ---
-\node[note, left=0.5cm of Template] {Template Method Pattern:\\Defines workflow structure};
-\node[note, right=0.5cm of Decorator] {Decorator Pattern:\\Dynamic feature addition};
-\node[note, above=0.5cm of Factory] {Factory Pattern:\\Encapsulates creation};
-\node[note, left=0.5cm of Strategy] {Strategy Pattern:\\Interchangeable fees};
+% --- Annotations ---
+\node[note, above=0.2cm of Factory] {Factory:\\Encapsulates creation};
+\node[note, above=0.2cm of Decorator] {Decorator:\\Dynamic features};
+\node[note, left=0.2cm of Strategy] {Strategy:\\Fee Algo};
+\node[note, right=0.2cm of Template] {Template:\\Workflow};
 
-\end{tikzpicture}%
-}
+\end{tikzpicture}
 \caption{Architectural Class Diagram}
 \label{fig:uml_improved}
 \end{figure}

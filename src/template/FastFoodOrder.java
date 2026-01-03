@@ -1,4 +1,4 @@
-package com.delivery.template;
+package template;
 
 /**
  * Concrete implementation for Fast Food Order.

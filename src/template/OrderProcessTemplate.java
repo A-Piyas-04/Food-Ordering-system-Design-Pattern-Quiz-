@@ -1,6 +1,6 @@
-package com.delivery.template;
+package template;
 
-import com.delivery.decorator.Order;
+import decorator.Order;
 
 /**
  * Abstract class defining the Template Method for order processing.

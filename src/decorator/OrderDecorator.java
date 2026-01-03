@@ -1,4 +1,4 @@
-package com.delivery.decorator;
+package decorator;
 
 /**
  * Abstract Decorator class for Order.

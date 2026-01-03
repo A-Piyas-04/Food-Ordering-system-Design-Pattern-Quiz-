@@ -1,4 +1,4 @@
-package com.delivery.decorator;
+package decorator;
 
 /**
  * Decorator to add Gift Wrap to the order.

@@ -1,4 +1,4 @@
-package com.delivery.decorator;
+package decorator;
 
 /**
  * Interface for the Order.

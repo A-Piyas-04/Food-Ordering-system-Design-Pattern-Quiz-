@@ -1,6 +1,6 @@
-package com.delivery.strategy;
+package strategy;
 
-import com.delivery.decorator.Order;
+import decorator.Order;
 
 /**
  * Surge delivery strategy.

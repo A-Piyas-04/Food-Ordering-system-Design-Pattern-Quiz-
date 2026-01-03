@@ -1,9 +1,9 @@
-package com.delivery.factory;
+package factory;
 
-import com.delivery.decorator.Order;
-import com.delivery.template.FastFoodOrder;
-import com.delivery.template.FineDiningOrder;
-import com.delivery.template.CloudKitchenOrder;
+import decorator.Order;
+import template.FastFoodOrder;
+import template.FineDiningOrder;
+import template.CloudKitchenOrder;
 
 /**
  * Factory class to create different types of orders.
